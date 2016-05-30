@@ -53,11 +53,38 @@ $(document).ready(function(){
 	players.push(new Player("Jari", false, 0, []));
 	players.push(new Player("Kim", false, 0, []));
 	players.push(new Player("Erik", false, 0, []));
+	players.push(new Player("Jonas", false, 0, []));
+	players.push(new Player("Karl", false, 0, []));
+	players.push(new Player("Peter", false, 0, []));
+	players.push(new Player("Erik", false, 0, []));
+	players.push(new Player("Hugo", false, 0, []));
 
 });
 
 function showHits(){
 
+}
+
+function abortCurrentGame(){
+	var abort;
+	abort = confirm("Är du säker på att du vill avsluta pågående spel?");
+
+	if(abort){
+		console.log("Spel avslutat");
+		game = [];
+
+
+		for(var i = 0; i < players.length; i++){
+			players[i].active = false;
+		}
+
+		updatePlayerList();
+		hits = [];
+		$("#hit-items").html("");
+		$("#abort-button").toggleClass("hidden");
+		$("#total-score").html("");
+		$("#ongoing-game-table").html("");
+	}
 }
 
 function calculateScore(){
@@ -179,18 +206,25 @@ function startNewGame(){
 		}
 		console.log("Spel startat, game mode: " + gamemode);
 		gameManager(game);
+		$("#abort-button").toggleClass("hidden");
 	}
 	
 }
 
 function addScore(){
-	if((game.players[game.turn - 1].score - calculateScore()) < 0){
+	if((game.players[game.turn - 1].score - calculateScore()) < 0 || (game.players[game.turn - 1].score - calculateScore()) == 1){
 		console.log("Fet");
-	}else if((game.players[game.turn - 1].score - calculateScore()) == 0){
-		game.players[game.turn - 1].score -= calculateScore();
 		game.players[game.turn - 1].hits.push(hits);
-		game.victor = game.players[game.turn - 1].name;
-		window.alert(game.victor + " är segraren!");
+	}else if((game.players[game.turn - 1].score - calculateScore()) == 0){
+		if(typeof hits != 'undefined'){
+			if(hits[hits.length - 1].substring(0,1) == "d" || hits[hits.length - 1].substring(0,4) == "Bull"){
+				game.players[game.turn - 1].score -= calculateScore();
+				game.players[game.turn - 1].hits.push(hits);
+				game.victor = game.players[game.turn - 1].name;
+				window.alert(game.victor + " är segraren!");
+			}
+		}
+		
 	}else{
 		game.players[game.turn - 1].score -= calculateScore();
 		game.players[game.turn - 1].hits.push(hits);
@@ -237,7 +271,12 @@ function redoLastTurn(){
 		$("#hit-items").append('<li class="list-group-item list-hit" id="hits-item">' + hits[i] + '<button type"button" onclick="removeHit(\'' + hits[i] + '\')" class="btn-remove-hit pull-right">X</button></li>');
 	}
 
-	game.players[game.turn - 1].score += calculateScore();
+	if(calculateScore() > game.players[game.turn - 1].score || (game.players[game.turn - 1].score - calculateScore()) == 1){
+
+	}else{
+		game.players[game.turn - 1].score += calculateScore();
+	}
+	
 
 	$("#total-score").html(calculateScore().toString());
 
