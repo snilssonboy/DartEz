@@ -35,6 +35,32 @@ body{
     margin: 5px;
 }
 
+#table-container{
+    position: relative;
+    bottom: 10px;
+}
+
+#app-viewport{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+#dartboard-container{
+    width: 100%;
+    height: 60%;
+}
+
+#scoreboard-container{
+    width: 100%;
+    height: 40%;
+}
+
+#new-game-players > tr > td:nth-child(2){
+    width: 100%;
+}
+
 #redo-score{
     width: 92.5px;
     margin-left: 5px;

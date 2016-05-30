@@ -30,11 +30,15 @@ $(document).ready(function(){
 
 	$("#dartboard #areas g").children().mousedown(function(){
 
-		if(hits.length < 3){
+		if(hits.length < 3 && typeof game != 'undefined'){
 			hits.push($(this).context.id);
 			$(this).css("fill", "#BDE7F5");
 			$("#hit-items").append('<li class="list-group-item list-hit" id="hits-item">' + $(this).context.id + '<button type"button" onclick="removeHit(\'' + $(this).context.id + '\')" class="btn-remove-hit pull-right">X</button></li>');
 			$("#total-score").html(calculateScore().toString());
+		}else if(typeof game == 'undefined'){
+			window.alert("Tryck på den blåa användarknappen för att lägga till spelare, eller den gröna play-knappen för att starta ett nytt spel!");
+			$("#managePlayers").addClass("btn-primary");
+			$("#openStart").addClass("btn-success");
 		}else{
 			window.alert("Du har redan 3 markerade träffar, ta bort från panelen till vänster för att göra ändringar.");
 		}
@@ -83,7 +87,7 @@ function clearFields(){
 
 function updatePlayerList(){
 	$("#player-table-body").html("");
-
+	$("#managePlayers").removeClass("btn-primary");
 	for(var i = 0; i < players.length; i++){
 		$("#player-table-body").append("<tr><td>" + players[i].name + "</td><td class='pull-right'><button type='button' class='btn btn-danger btn-toggle' onclick='removePlayer("+ i + ")'><i class='fa fa-times' aria-hidden='true'></i></button></td></tr>");
 	}
@@ -112,9 +116,9 @@ function newGamePlayerList(){
 
 	for(var i = 0; i < players.length; i++){
 		if(players[i].active){
-			$("#new-game-players").append("<tr class='active'><td>" + players[i].name + "</td><td class='pull-right'><button type='button' class='btn btn-danger btn-toggle' onclick='togglePlayerActive(" + i + ")'><i class='fa fa-minus' aria-hidden='true'></i></button></td></tr>");
+			$("#new-game-players").append("<tr class='active'><td>" + players[i].name + "</td><td><button type='button' class='btn btn-danger btn-toggle pull-right' onclick='togglePlayerActive(" + i + ")'><i class='fa fa-minus' aria-hidden='true'></i></button></td></tr>");
 		}else{
-			$("#new-game-players").append("<tr><td>" + players[i].name + "</td><td class='pull-right'><button type='button' class='btn btn-success btn-toggle' onclick='togglePlayerActive(" + i + ")'><i class='fa fa-plus' aria-hidden='true'></i></button></td></tr>");
+			$("#new-game-players").append("<tr><td>" + players[i].name + "</td><td><button type='button' class='btn btn-success btn-toggle pull-right' onclick='togglePlayerActive(" + i + ")'><i class='fa fa-plus' aria-hidden='true'></i></button></td></tr>");
 		}
 		
 	}
@@ -128,6 +132,7 @@ function togglePlayerActive(id){
 
 function newGameSettings(){
 	newGamePlayerList();
+	$("#openStart").removeClass("btn-success");
 }
 
 function shuffle(a) {
