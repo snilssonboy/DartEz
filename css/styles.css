@@ -3,7 +3,7 @@ body {
   /* fallback for old browsers */
   background: -webkit-linear-gradient(to top, #304352, #d7d2cc);
   /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to top, #304352, #d7d2cc);
+  background: linear-gradient(to top, #809096, #d7d2cc);
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   background-repeat: none;
   background-attachment: fixed;
@@ -32,7 +32,9 @@ body {
 
 #hits-item {
   background-color: gray;
-  margin: 5px; }
+  margin: 5px;
+  height: 40px;
+  border-radius: 5px; }
 
 #table-container {
   position: relative;
@@ -46,11 +48,11 @@ body {
 
 #dartboard-container {
   width: 100%;
-  height: 60%; }
+  height: 50%; }
 
 #scoreboard-container {
   width: 100%;
-  height: 40%; }
+  height: 50%; }
 
 #new-game-players > tr > td:nth-child(2) {
   width: 100%; }
@@ -58,8 +60,8 @@ body {
 #redo-score {
   width: 92.5px;
   margin-left: 5px;
-  position: absolute;
-  top: 262px;
+  position: relative;
+  bottom: 15px;
   display: inline-block;
   font-weight: normal;
   text-align: center;
@@ -82,9 +84,9 @@ body {
 #submit-score {
   width: 92.5px;
   margin-left: 5px;
-  position: absolute;
-  right: 5px;
-  top: 262px;
+  position: relative;
+  left: 5px;
+  bottom: 15px;
   display: inline-block;
   font-weight: normal;
   text-align: center;
@@ -104,18 +106,44 @@ body {
   -ms-user-select: none;
   user-select: none; }
 
+.list-group-horizontal {
+  margin-top: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+  height: 50px;
+  border-radius: 5px; }
+
+.list-group-horizontal .list-group-item {
+  display: inline-block; }
+
+.list-group-horizontal .list-group-item {
+  margin-bottom: 0;
+  margin-left: 10px;
+  margin-right: 0; }
+
+.list-group-horizontal .list-group-item:first-child {
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 4px; }
+
+.list-group-horizontal .list-group-item:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 0; }
+
 .btn-toggle {
   height: 25px;
   width: 30px;
   padding: 0px; }
 
 .list-hit {
-  background-color: white !important; }
+  background-color: white !important;
+  width: 31.5%;
+  font-size: 24px;
+  line-height: 20px;
+  margin-left: 10px; }
 
 .btn-remove-hit {
   position: relative;
-  top: -7px;
-  right: -10px;
+  top: -8px;
+  right: -12px;
   display: inline-block;
   margin-bottom: 0;
   font-weight: normal;
@@ -139,3 +167,8 @@ body {
 table {
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 4px; }
+
+#abort-button {
+  position: absolute;
+  top: 5px;
+  right: 10px; }
