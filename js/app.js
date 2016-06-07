@@ -24,7 +24,7 @@ $(document).ready(function(){
 		if(hits.length < 3 && typeof game != 'undefined'){
 			hits.push($(this).context.id);
 			//$(this).css("fill", "#BDE7F5");
-			$("#hit-items").append('<li class="list-group-item list-hit" id="hits-item">' + $(this).context.id + '<button type"button" onclick="removeHit(\'' + $(this).context.id + '\')" class="btn-remove-hit pull-right">X</button></li>');
+			$("#hit-items").append('<li class="list-group-item list-hit" id="hits-item" onclick="removeHit(\'' + $(this).context.id + '\')">' + $(this).context.id + '</li>');
 			$("#total-score").html(calculateScore().toString());
 		}else if(typeof game == 'undefined'){
 			//window.alert("Tryck på den blåa användarknappen för att lägga till spelare, eller den gröna play-knappen för att starta ett nytt spel!");
@@ -462,7 +462,7 @@ function removeHit(hitId){
 	$("#hit-items").html("");
 
 	for(var i = 0; i < hits.length; i++){
-		$("#hit-items").append('<li class="list-group-item list-hit" id="hits-item">' + hits[i] + '<button type"button" onclick="removeHit(\'' + hits[i] + '\')" class="btn-remove-hit pull-right">X</button></li>');
+		$("#hit-items").append('<li class="list-group-item list-hit" onclick="removeHit(\'' + hits[i] + '\')" id="hits-item">' + hits[i] + '</li>');
 	}
 
 	$("#total-score").html(calculateScore().toString());
