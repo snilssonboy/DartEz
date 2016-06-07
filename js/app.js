@@ -207,6 +207,7 @@ function abortCurrentGame(){
 		$("#ongoing-game-table").html("");
 		$("#button-panel").toggleClass("hidden");
 		*/
+
 		location.reload();
 	}
 }
@@ -297,7 +298,7 @@ function shuffle(a) {
 }
 
 function startNewGame(){
-	console.log("Startar spel");
+	console.log("Startar spel"); 
 
 	var gamemode;
 
@@ -328,9 +329,11 @@ function startNewGame(){
 			game.players[i].score = gamemode;
 		}
 		console.log("Spel startat, game mode: " + gamemode);
-		gameManager(game);
+		
 		$("#abort-button").toggleClass("hidden");
 		$("#button-panel").toggleClass("hidden");
+
+		gameManager(game);
 	}
 	
 }
@@ -441,7 +444,8 @@ function gameManager(gameobj){
 		$("#ongoing-game-table").append("<tr><th>" + (i + 1) + "</th><td>" + gameobj.players[i].name + "</td><td>" + gameobj.players[i].score + "</td><td>" + getOut(gameobj.players[i].score) + "</td><td>" + lastHitsString +  "</td></tr>");
 	}
 
-	$("#ongoing-game-table tr:nth-child(" + gameobj.turn + ")").toggleClass("active")
+	$("#ongoing-game-table tr:nth-child(" + gameobj.turn + ")").toggleClass("active");
+
 }
 
 function removeHit(hitId){
