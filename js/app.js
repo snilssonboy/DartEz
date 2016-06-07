@@ -17,6 +17,22 @@ var Game = function(PLAYERS, ROUND, TURN, VICTOR){
 
 var game;
 
+$(document).click(function(event) {
+	if(hits.length < 3 && typeof game != 'undefined'){
+		if(event.target.id === "dartboard-container" || event.target.id === "dartboard"){
+			hits.push("Miss");
+			$("#hit-items").append('<li class="list-group-item list-hit" id="hits-item" onclick="removeHit(\'' + "Miss" + '\')">' + "Miss" + '</li>');
+		}
+	}else if(typeof game == 'undefined'){
+		$("#managePlayers").addClass("btn-primary");
+		$("#openStart").addClass("btn-success");
+	}else{
+
+	}
+	
+	showHits();
+});
+
 $(document).ready(function(){
 
 	$("#dartboard #areas g").children().mousedown(function(){
@@ -25,7 +41,7 @@ $(document).ready(function(){
 			hits.push($(this).context.id);
 			//$(this).css("fill", "#BDE7F5");
 			$("#hit-items").append('<li class="list-group-item list-hit" id="hits-item" onclick="removeHit(\'' + $(this).context.id + '\')">' + $(this).context.id + '</li>');
-			$("#total-score").html(calculateScore().toString());
+			//$("#total-score").html(calculateScore().toString());
 		}else if(typeof game == 'undefined'){
 			//window.alert("Tryck på den blåa användarknappen för att lägga till spelare, eller den gröna play-knappen för att starta ett nytt spel!");
 			$("#managePlayers").addClass("btn-primary");
@@ -394,7 +410,7 @@ function redoLastTurn(){
 	$("#hit-items").html("");
 
 	for(var i = 0; i < hits.length; i++){
-		$("#hit-items").append('<li class="list-group-item list-hit" id="hits-item">' + hits[i] + '<button type"button" onclick="removeHit(\'' + hits[i] + '\')" class="btn-remove-hit pull-right">X</button></li>');
+		$("#hit-items").append('<li class="list-group-item list-hit" onclick="removeHit(\'' + hits[i] + '\')" id="hits-item">' + hits[i] + '</li>');
 	}
 
 	if(calculateScore() > game.players[game.turn - 1].score || (game.players[game.turn - 1].score - calculateScore()) == 1){
