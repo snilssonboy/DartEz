@@ -617,6 +617,20 @@ function gameManager(gameobj){
 
 }
 
+function replayGame(){
+	shuffle(game.players);
+	game.turn = 1;
+	game.round = 1;
+	game.victor = 1;
+
+	for(var i = 0; i < game.players.length; i++){
+		game.players[i].score = game.mode;
+		game.players[i].hits = [];
+	}
+
+	gameManager(game);
+}
+
 function removeHit(hitId){
 
 	//Locates and splices out matching hit from hits array
