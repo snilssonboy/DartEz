@@ -172,3 +172,13 @@ table {
   position: absolute;
   top: 5px;
   right: 10px; }
+
+#replay-button {
+  position: absolute;
+  top: 5px;
+  right: 10px; }
+
+#last-minute {
+  position: absolute;
+  top: 5px;
+  left: 10px; }

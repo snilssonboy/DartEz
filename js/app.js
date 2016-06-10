@@ -8,11 +8,12 @@ var Player = function(NAME, ACTIVE, SCORE, HITS){
 	this.hits = HITS;
 }
 
-var Game = function(PLAYERS, ROUND, TURN, VICTOR){
+var Game = function(PLAYERS, ROUND, TURN, VICTOR, MODE){
 	this.players = PLAYERS;
 	this.round = ROUND;
 	this.turn = TURN;
 	this.victor = VICTOR;
+	this.mode = MODE;
 }
 
 var game;
@@ -63,7 +64,6 @@ players.push(new Player("Erik", false, 0, []));
 players.push(new Player("Jonas", false, 0, []));
 players.push(new Player("Karl", false, 0, []));
 players.push(new Player("Peter", false, 0, []));
-players.push(new Player("Erik", false, 0, []));
 players.push(new Player("Hugo", false, 0, []));
 players.push(new Player("Emanuel", false, 0, []));
 players.push(new Player("Oscar", false, 0, []));
@@ -132,7 +132,7 @@ var outs = {
 	"104": "t18, 18, d16",
 	"103": "t20, 11, d16",
 	"102": "t20, 10, d16",
-	"101": "t17 18, d16",
+	"101": "t17, 18, d16",
 	"100": "t20, d20",	
 	"99": "t19, 10, d16",
 	"98": "t20, d19",		
@@ -242,6 +242,68 @@ function showHits(){
 	}
 }
 
+function toggleLivePlayerActive(id, active){
+	if(active){
+		for(var i = 0; i < players.length; i++){
+			if(game.players[id].name == players[i].name){
+
+				if(game.players.length == 1){
+					$("#liveAddRemove").modal('hide');
+					window.alert("Leave " + game.players[0].name + " alone! :(");
+					return liveAddRemoveList();
+				}
+				players[i].active = false;
+				game.players.splice(id, 1);
+
+				//Om jag tar bort spelare vars tur det är MEN det är sista spelaren i listan
+				if(id == game.turn - 1 && typeof game.players[game.turn - 1] == 'undefined'){
+					game.turn = 1;
+					game.round++;
+					return liveAddRemoveList();
+				//Om jag tar bort spelare vars tur det är
+				}else if(id == game.turn - 1){
+					return liveAddRemoveList();
+				//Om jag tar bort spelare före spelarens var tur det är
+				}else if(id < game.turn){
+					game.turn--;
+					return liveAddRemoveList();
+				}
+
+				return liveAddRemoveList();
+			}
+		}
+	}else{
+		players[id].active = true;
+		players[id].score = game.mode;
+		game.players.push(players[id]);
+		liveAddRemoveList();
+	}
+
+}
+
+function liveAddRemoveList(){
+
+	$("#current-game-players").html("");
+
+	for(var i = 0; i < game.players.length; i++){
+		$("#current-game-players").append("<tr class='active'><td>" + game.players[i].name + "</td><td><button type='button' class='btn btn-danger btn-toggle pull-right' onclick='toggleLivePlayerActive(" + i + "," + true + ")'><i class='fa fa-minus' aria-hidden='true'></i></button></td></tr>");
+	}
+
+	for(var x = 0; x < players.length; x++){
+		if(!players[x].active){
+			$("#current-game-players").append("<tr><td>" + players[x].name + "</td><td><button type='button' class='btn btn-success btn-toggle pull-right' onclick='toggleLivePlayerActive(" + x + "," + false + ")'><i class='fa fa-plus' aria-hidden='true'></i></button></td></tr>");	
+		}
+		
+	}
+
+}
+
+
+function applyAndResume(){
+	gameManager(game);
+}
+
+
 function abortCurrentGame(){
 	var abort;
 	abort = confirm("Är du säker på att du vill avsluta pågående spel?");
@@ -257,6 +319,7 @@ function abortCurrentGame(){
 
 		updatePlayerList();
 		hits = [];
+
 		/*
 		$("#hit-items").html("");
 		$("#abort-button").toggleClass("hidden");
@@ -381,7 +444,7 @@ function startNewGame(){
 		shuffle(activePlayers);
 
 		//Create game with variables: Players[], round(int), turn(int), victor(string)
-		game = new Game(activePlayers, 1, 1, "");
+		game = new Game(activePlayers, 1, 1, "", gamemode);
 		for(var i = 0; i < game.players.length; i++){
 			game.players[i].score = gamemode;
 		}
@@ -389,6 +452,7 @@ function startNewGame(){
 		
 		$("#abort-button").toggleClass("hidden");
 		$("#button-panel").toggleClass("hidden");
+		$("#last-minute").toggleClass("hidden");
 
 		gameManager(game);
 	}
@@ -399,6 +463,14 @@ function addScore(){
 	if((game.players[game.turn - 1].score - calculateScore()) < 0 || (game.players[game.turn - 1].score - calculateScore()) == 1){
 		console.log("Fet");
 		game.players[game.turn - 1].hits.push(hits);
+
+		game.turn += 1;
+
+		if(game.turn > game.players.length){
+			game.turn = 1;
+			game.round++;
+		}
+
 	}else if((game.players[game.turn - 1].score - calculateScore()) == 0){
 		if(typeof hits != 'undefined'){
 			if(hits[hits.length - 1].substring(0,1) == "d" || hits[hits.length - 1].substring(0,4) == "Bull"){
@@ -406,23 +478,25 @@ function addScore(){
 				game.players[game.turn - 1].hits.push(hits);
 				game.victor = game.players[game.turn - 1].name;
 				window.alert(game.victor + " är segraren!");
+				$("#abort-button").toggleClass("hidden");
+				$("#replay-button").toggleClass("hidden");
 			}
 		}
 		
 	}else{
 		game.players[game.turn - 1].score -= calculateScore();
 		game.players[game.turn - 1].hits.push(hits);
+
+		game.turn += 1;
+
+		if(game.turn > game.players.length){
+			game.turn = 1;
+			game.round++;
+		}
 	}
 	
 	hits = [];
 	$("#hit-items").html("");
-
-	game.turn += 1;
-
-	if(game.turn > game.players.length){
-		game.turn = 1;
-		game.round++;
-	}
 
 	gameManager(game);
 
