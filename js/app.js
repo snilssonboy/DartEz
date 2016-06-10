@@ -592,6 +592,7 @@ function getOut(score){
 }
 
 function gameManager(gameobj){
+	$("#dartboard #areas g").children().css("fill", "");
 	$("#ongoing-game-table").html("");
 
 	for(var i = 0; i < gameobj.players.length; i++){
