@@ -18,8 +18,10 @@
     <link rel="stylesheet" href="css/font-awesome.min.css">
 
     
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <!--<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>-->
+    <script src="js/jquery-3.0.0.js"></script>    
+    <!--<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>-->
+    <script src="js/jquery.mobile-1.4.5.js"></script>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -315,10 +317,18 @@
             </tbody>
           </table>
 
-          <h4>Game Mode</h4>
+          <h4>Speltyp</h4>
             <label class="radio-inline"><input name="game_mode" id="mode_101" type="radio" value="">101</label>
             <label class="radio-inline active"><input name="game_mode" id="mode_301" type="radio" value="" checked="checked">301</label>
             <label class="radio-inline"><input name="game_mode" id="mode_501" type="radio" value="">501</label>
+
+            <h4>Tvinga avslut på dubbel/bullseye</h4>
+            <label class="switch">
+            <input class="switch-input" type="checkbox" checked="checked">
+            <span class="switch-label" data-on="Ja" data-off="Nej"></span> 
+            <span class="switch-handle"></span> 
+          </label>
+
           </div>
 
           <div class="modal-footer">

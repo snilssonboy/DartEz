@@ -8,12 +8,13 @@ var Player = function(NAME, ACTIVE, SCORE, HITS){
 	this.hits = HITS;
 }
 
-var Game = function(PLAYERS, ROUND, TURN, VICTOR, MODE){
+var Game = function(PLAYERS, ROUND, TURN, VICTOR, MODE, FORCED){
 	this.players = PLAYERS;
 	this.round = ROUND;
 	this.turn = TURN;
 	this.victor = VICTOR;
 	this.mode = MODE;
+	this.forceD = FORCED;
 }
 
 var game;
@@ -56,6 +57,7 @@ $(document).ready(function(){
 	});
 
 });
+
 
 players.push(new Player("Simon", false, 0, []));
 players.push(new Player("Jari", false, 0, []));
@@ -239,6 +241,7 @@ function showHits(){
 		$("#hits-container").addClass("hidden");
 	}else{
 		$("#hits-container").removeClass("hidden");
+		calculateScore();
 	}
 }
 
@@ -350,6 +353,8 @@ function calculateScore(){
 
 	}
 
+	$("#ongoing-game-table tr.active td:nth-child(3)").html(game.players[game.turn - 1].score + " (" + (game.players[game.turn - 1].score - score) + ")");
+
 	return score;
 }
 
@@ -396,6 +401,8 @@ function newGamePlayerList(){
 	}
 }
 
+
+
 function togglePlayerActive(id){
 	players[id].active = !players[id].active;
 
@@ -421,6 +428,7 @@ function startNewGame(){
 	console.log("Startar spel"); 
 
 	var gamemode;
+	var forceDouble;
 
 	if($("#mode_101").prop("checked")){
 		gamemode = 101;
@@ -429,6 +437,8 @@ function startNewGame(){
 	}else if($("#mode_501").prop("checked")){
 		gamemode = 501;
 	}
+
+	forceDouble = $(".switch-input").prop("checked");
 
 	var activePlayers = [];
 
@@ -444,7 +454,7 @@ function startNewGame(){
 		shuffle(activePlayers);
 
 		//Create game with variables: Players[], round(int), turn(int), victor(string)
-		game = new Game(activePlayers, 1, 1, "", gamemode);
+		game = new Game(activePlayers, 1, 1, "", gamemode, forceDouble);
 		for(var i = 0; i < game.players.length; i++){
 			game.players[i].score = gamemode;
 		}
@@ -473,7 +483,23 @@ function addScore(){
 
 	}else if((game.players[game.turn - 1].score - calculateScore()) == 0){
 		if(typeof hits != 'undefined'){
-			if(hits[hits.length - 1].substring(0,1) == "d" || hits[hits.length - 1].substring(0,4) == "Bull"){
+			if(game.forceD){
+				if(hits[hits.length - 1].substring(0,1) == "d" || hits[hits.length - 1].substring(0,4) == "Bull"){
+					game.players[game.turn - 1].score -= calculateScore();
+					game.players[game.turn - 1].hits.push(hits);
+					game.victor = game.players[game.turn - 1].name;
+					window.alert(game.victor + " är segraren!");
+					$("#abort-button").toggleClass("hidden");
+					$("#replay-button").toggleClass("hidden");
+				}else{
+					game.turn += 1;
+
+					if(game.turn > game.players.length){
+						game.turn = 1;
+						game.round++;
+					}
+				}
+			}else{
 				game.players[game.turn - 1].score -= calculateScore();
 				game.players[game.turn - 1].hits.push(hits);
 				game.victor = game.players[game.turn - 1].name;
@@ -481,6 +507,7 @@ function addScore(){
 				$("#abort-button").toggleClass("hidden");
 				$("#replay-button").toggleClass("hidden");
 			}
+			
 		}
 		
 	}else{
